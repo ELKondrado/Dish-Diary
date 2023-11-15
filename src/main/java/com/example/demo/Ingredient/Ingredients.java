@@ -7,7 +7,6 @@ public class Ingredients {
     private String name;
     private double quantity;
 
-
     public Ingredients( String name, double quantity) {
         this.name = name;
         this.quantity = quantity;
