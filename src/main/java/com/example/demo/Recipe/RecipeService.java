@@ -1,19 +1,52 @@
 package com.example.demo.Recipe;
 
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 @Service
 public class RecipeService {
+    private final RecipeRepository recipeRepository;
+
+    @Autowired
+    public RecipeService(RecipeRepository recipeRepository) {
+        this.recipeRepository = recipeRepository;
+    }
+
     @GetMapping
     public List<Recipe> getRecipes(){
-        LinkedList<String> ingredients = new LinkedList<>();
-        ingredients.add("Mere");
-        ingredients.add("Zahar");
-        return List.of(
-                new Recipe("Placinta mere", ingredients, "Bati merele")
-        );
+        return recipeRepository.findAll();
+    }
+
+    public void addNewRecipe(Recipe recipe) {
+        Optional<Recipe> recipeOptional = recipeRepository.findRecipeByName(recipe.getName());
+        if(recipeOptional.isPresent()){
+            throw new IllegalStateException("Name taken");
+        }
+        recipeRepository.save(recipe);
+    }
+
+    public void deleteRecipe(Long recipeId) {
+        boolean exists = recipeRepository.existsById(recipeId);
+        if(!exists){
+            throw new IllegalStateException("Recipe with id: " + recipeId + " does not exist");
+        }
+        recipeRepository.deleteById(recipeId);
+    }
+
+    @Transactional
+    public void updateRecipe(long recipeId, String name) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalStateException("Recipe with id: " + recipeId + " does not exist"));
+        if(name != null && name.length() > 0 && !Objects.equals(recipe.getName(), name)){
+            recipe.setName(name);
+        }
     }
 }

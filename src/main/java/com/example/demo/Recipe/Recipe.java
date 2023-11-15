@@ -1,14 +1,29 @@
 package com.example.demo.Recipe;
 
+import com.example.demo.Ingredient.Ingredient;
+import jakarta.persistence.*;
+
 import java.util.LinkedList;
 
+@Table
+@Entity
 public class Recipe {
+    @Id
+    @SequenceGenerator(
+            name = "recipe_sequence",
+            sequenceName = "recipe_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "recipe_sequence"
+    )
     private long id;
     private String name;
-    private LinkedList<String> ingredients;
+    private LinkedList<Ingredient> ingredients;
     private String stepsOfPreparation;
 
-    public Recipe(long id, String name, LinkedList<String> ingredients, String stepsOfPreparation) {
+    public Recipe(long id, String name, LinkedList<Ingredient> ingredients, String stepsOfPreparation) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
@@ -18,7 +33,7 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(String name, LinkedList<String> ingredients, String stepsOfPreparation) {
+    public Recipe(String name, LinkedList<Ingredient> ingredients, String stepsOfPreparation) {
         this.name = name;
         this.ingredients = ingredients;
         this.stepsOfPreparation = stepsOfPreparation;
@@ -40,11 +55,11 @@ public class Recipe {
         this.name = name;
     }
 
-    public LinkedList<String> getIngredients() {
+    public LinkedList<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(LinkedList<String> ingredients) {
+    public void setIngredients(LinkedList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 

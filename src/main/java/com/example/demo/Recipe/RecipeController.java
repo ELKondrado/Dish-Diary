@@ -1,8 +1,7 @@
 package com.example.demo.Recipe;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -11,6 +10,7 @@ import java.util.List;
 public class RecipeController {
     private final RecipeService recipeService;
 
+    @Autowired
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
@@ -18,5 +18,21 @@ public class RecipeController {
     @GetMapping
     public List<Recipe> getRecipes(){
        return recipeService.getRecipes();
+    }
+
+    @PostMapping
+    public void registerNewRecipe(@RequestBody Recipe recipe){
+        recipeService.addNewRecipe(recipe);
+    }
+
+    @DeleteMapping(path = "{recipeId}")
+    public void deleteRecipe(@PathVariable("recipeId") Long recipeId){
+        recipeService.deleteRecipe(recipeId);
+    }
+
+    @PutMapping(path = "{recipeId}")
+    public void updateRecipe(@PathVariable("recipeId") long recipeId,
+                             @RequestParam(required = false) String name){
+        recipeService.updateRecipe(recipeId, name);
     }
 }
