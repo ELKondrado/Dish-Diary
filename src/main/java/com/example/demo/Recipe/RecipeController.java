@@ -24,4 +24,15 @@ public class RecipeController {
     public void registerNewRecipe(@RequestBody Recipe recipe){
         recipeService.addNewRecipe(recipe);
     }
+
+    @DeleteMapping(path = "{recipeId}")
+    public void deleteRecipe(@PathVariable("recipeId") Long recipeId){
+        recipeService.deleteRecipe(recipeId);
+    }
+
+    @PutMapping(path = "{recipeId}")
+    public void updateRecipe(@PathVariable("recipeId") long recipeId,
+                             @RequestParam(required = false) String name){
+        recipeService.updateRecipe(recipeId, name);
+    }
 }

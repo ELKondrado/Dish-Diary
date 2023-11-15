@@ -1,5 +1,6 @@
 package com.example.demo.Recipe;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -29,5 +31,22 @@ public class RecipeService {
             throw new IllegalStateException("Name taken");
         }
         recipeRepository.save(recipe);
+    }
+
+    public void deleteRecipe(Long recipeId) {
+        boolean exists = recipeRepository.existsById(recipeId);
+        if(!exists){
+            throw new IllegalStateException("Recipe with id: " + recipeId + " does not exist");
+        }
+        recipeRepository.deleteById(recipeId);
+    }
+
+    @Transactional
+    public void updateRecipe(long recipeId, String name) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalStateException("Recipe with id: " + recipeId + " does not exist"));
+        if(name != null && name.length() > 0 && !Objects.equals(recipe.getName(), name)){
+            recipe.setName(name);
+        }
     }
 }
