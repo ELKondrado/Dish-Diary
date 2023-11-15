@@ -1,8 +1,22 @@
 package com.example.demo.Recipe;
 
+import jakarta.persistence.*;
+
 import java.util.LinkedList;
 
+@Table
+@Entity
 public class Recipe {
+    @Id
+    @SequenceGenerator(
+            name = "recipe_sequence",
+            sequenceName = "recipe_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "recipe_sequence"
+    )
     private long id;
     private String name;
     private LinkedList<String> ingredients;
