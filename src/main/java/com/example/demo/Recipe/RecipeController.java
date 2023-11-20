@@ -1,12 +1,15 @@
 package com.example.demo.Recipe;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "api/v1/recipe")
+@RequestMapping(path = "/recipe")
 public class RecipeController {
     private final RecipeService recipeService;
 
@@ -15,24 +18,39 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping
-    public List<Recipe> getRecipes(){
-       return recipeService.getRecipes();
+    @GetMapping("/find")
+    public ResponseEntity<List<Recipe>> getRecipes(){
+        List<Recipe> recipes = recipeService.getRecipes();
+        return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 
-    @PostMapping
-    public void registerNewRecipe(@RequestBody Recipe recipe){
-        recipeService.addNewRecipe(recipe);
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable("id") Long id){
+        Recipe recipe = recipeService.findRecipeById(id);
+        return new ResponseEntity<>(recipe, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "{recipeId}")
-    public void deleteRecipe(@PathVariable("recipeId") Long recipeId){
+    @PostMapping("/add")
+    public ResponseEntity<Recipe> registerNewRecipe(@RequestBody Recipe recipe){
+        Recipe newRecipe = recipeService.addNewRecipe(recipe);
+        return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete/{recipeId}")
+    public ResponseEntity<Recipe> deleteRecipe(@PathVariable("recipeId") Long recipeId){
         recipeService.deleteRecipe(recipeId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(path = "{recipeId}")
-    public void updateRecipe(@PathVariable("recipeId") long recipeId,
-                             @RequestParam(required = false) String name){
-        recipeService.updateRecipe(recipeId, name);
+    @PutMapping("/update/{recipeId}")
+    public ResponseEntity<Recipe> updateRecipe(@PathVariable("recipeId") long recipeId,
+                                               @RequestParam(required = false) String name,
+                                               @RequestParam(required = false) String ingredients,
+                                               @RequestParam(required = false) String stepsOfPreparation){
+        Recipe recipe;
+        recipe = recipeService.updateRecipe(recipeId, name);
+        recipe = recipeService.updateRecipe(recipeId, ingredients);
+        recipe = recipeService.updateRecipe(recipeId, stepsOfPreparation);
+        return new ResponseEntity<Recipe>(recipe,HttpStatus.OK);
     }
 }

@@ -1,9 +1,12 @@
 package com.example.demo.Ingredient;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 public class Ingredient {
     private String name;
     private double quantity;
+    private Long id;
 
     public Ingredient(String name, double quantity) {
         this.name = name;
@@ -26,6 +29,14 @@ public class Ingredient {
 
     public double getQuantity() {
         return quantity;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
 

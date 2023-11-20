@@ -10,9 +10,6 @@ import java.util.Optional;
 public interface RecipeRepository extends JpaRepository<Recipe,Long> {
     @Query("SELECT r FROM Recipe r WHERE r.name = ?1")
     Optional<Recipe> findRecipeByName(String name);
+
+    Optional<Recipe> findRecipeById(Long id);
 }
-
-
-
-
-
