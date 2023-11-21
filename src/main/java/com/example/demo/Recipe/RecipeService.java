@@ -1,12 +1,11 @@
 package com.example.demo.Recipe;
 
+import com.example.demo.Exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,12 +24,16 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
-    public void addNewRecipe(Recipe recipe) {
+    public Recipe findRecipeById(Long id) {
+        return recipeRepository.findRecipeById(id).orElseThrow(() -> new UserNotFoundException("User by id" + id + " was not found"));
+    }
+
+    public Recipe addNewRecipe(Recipe recipe) {
         Optional<Recipe> recipeOptional = recipeRepository.findRecipeByName(recipe.getName());
         if(recipeOptional.isPresent()){
             throw new IllegalStateException("Name taken");
         }
-        recipeRepository.save(recipe);
+        return recipeRepository.save(recipe);
     }
 
     public void deleteRecipe(Long recipeId) {
@@ -42,11 +45,12 @@ public class RecipeService {
     }
 
     @Transactional
-    public void updateRecipe(long recipeId, String name) {
+    public Recipe updateRecipe(long recipeId, String name) {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new IllegalStateException("Recipe with id: " + recipeId + " does not exist"));
         if(name != null && name.length() > 0 && !Objects.equals(recipe.getName(), name)){
             recipe.setName(name);
         }
+        return recipe;
     }
 }

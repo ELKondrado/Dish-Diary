@@ -1,9 +1,6 @@
 package com.example.demo.Recipe;
 
-import com.example.demo.Ingredient.Ingredient;
 import jakarta.persistence.*;
-
-import java.util.LinkedList;
 
 @Table
 @Entity
@@ -20,10 +17,10 @@ public class Recipe {
     )
     private long id;
     private String name;
-    private LinkedList<Ingredient> ingredients;
+    private String ingredients;
     private String stepsOfPreparation;
 
-    public Recipe(long id, String name, LinkedList<Ingredient> ingredients, String stepsOfPreparation) {
+    public Recipe(long id, String name, String ingredients, String stepsOfPreparation) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
@@ -33,7 +30,7 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(String name, LinkedList<Ingredient> ingredients, String stepsOfPreparation) {
+    public Recipe(String name, String ingredients, String stepsOfPreparation) {
         this.name = name;
         this.ingredients = ingredients;
         this.stepsOfPreparation = stepsOfPreparation;
@@ -55,11 +52,11 @@ public class Recipe {
         this.name = name;
     }
 
-    public LinkedList<Ingredient> getIngredients() {
+    public String getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(LinkedList<Ingredient> ingredients) {
+    public void setIngredients(String ingredients) {
         this.ingredients = ingredients;
     }
 
