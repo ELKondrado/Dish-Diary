@@ -1,5 +1,8 @@
 package com.example.recipeapp.User;
 
+import com.sun.istack.NotNull;
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,6 +21,7 @@ public class User {
     @Column(name="id")
     private long userId;
     @Column(name="username")
+    @NotNull
     private String userName;
     @Column(name="email")
     private String userEmail;

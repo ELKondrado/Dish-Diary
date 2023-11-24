@@ -1,8 +1,6 @@
 package com.example.recipeapp.User;
 
 import com.example.recipeapp.Exception.UserNotFoundException;
-import com.example.recipeapp.Recipe.Recipe;
-import com.example.recipeapp.Recipe.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +30,15 @@ public class UserService {
 
     public User addNewUser(User user) {
         Optional<User> userOptional = userRepository.findUserByUserEmail(user.getUserEmail());
+        if(user.getUserName().length() == 0 || user.getUserName() == null) {
+            throw new IllegalStateException("Name does not exist!");
+        }
+        if(user.getUserEmail().length() == 0 || user.getUserEmail() == null) {
+            throw new IllegalStateException("Email does not exist!");
+        }
+        if(user.getUserPassword().length() == 0 || user.getUserPassword() == null) {
+            throw new IllegalStateException("Password does not exist!");
+        }
         if(userOptional.isPresent()){
             throw new IllegalStateException("Email taken!");
         }
@@ -48,7 +55,7 @@ public class UserService {
 
     @Transactional
     public User updateUserName(long userId, String name) {
-        User user = getUser(userId);
+        User user = getUserById(userId);
         if(name != null && name.length() > 0 && !Objects.equals(user.getUserName(), name)){
             user.setUserName(name);
         }
@@ -57,14 +64,14 @@ public class UserService {
 
     @Transactional
     public User updateUserEmail(long userId, String email) {
-        User user = getUser(userId);
+        User user = getUserById(userId);
         if(email != null && email.length() > 0 && !Objects.equals(user.getUserEmail(), email)){
             user.setUserEmail(email);
         }
         return user;
     }
 
-    private User getUser(long userId) {
+    private User getUserById(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("User with id: " + userId + " does not exist"));
     }
