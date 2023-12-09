@@ -10,7 +10,7 @@ import { RouterModule, Routes, RouterOutlet } from '@angular/router';
 import { MainPageComponent } from './Components/main-page/main-page.component';
 import { UserService } from './Models/User/user.service';
 import { AuthGuard } from './Security/auth.guard';
-import { AuthService } from './Security/auth.Service';
+import { AuthService } from './Security/auth.service';
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full'},

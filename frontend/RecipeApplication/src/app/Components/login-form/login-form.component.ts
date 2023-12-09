@@ -3,7 +3,7 @@ import { UserService } from '../../Models/User/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../Security/auth.Service';
+import { AuthService } from '../../Security/auth.service';
 
 @Component({
   selector: 'app-login-form',

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../../Models/User/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RecipeService } from '../../Models/Recipe/recipe.service';
-import { AuthService } from '../../Security/auth.Service';
+import { AuthService } from '../../Security/auth.service';
 
 @Component({
   selector: 'app-main-page',
