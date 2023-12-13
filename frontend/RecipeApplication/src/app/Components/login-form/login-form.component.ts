@@ -28,10 +28,10 @@ export class LoginFormComponent implements OnInit {
         console.log(response);
         this.authService.setAccessToken(response.token);
         this.router.navigate(['/main']);
+        localStorage.setItem('access_token', response.token);
       },
       (error: HttpErrorResponse) => {
         console.error(error.error.error);
-        // Handle authentication error
       }
     );
   }
