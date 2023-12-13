@@ -11,6 +11,7 @@ import { MainPageComponent } from './Components/main-page/main-page.component';
 import { UserService } from './Models/User/user.service';
 import { AuthGuard } from './Security/auth.guard';
 import { AuthService } from './Security/auth.service';
+import { RecipeFormComponent } from './Components/recipe-form/recipe-form.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -25,6 +26,8 @@ const routes: Routes = [
     LoginFormComponent,
     RegisterFormComponent,
     MainPageComponent,
+    RecipeFormComponent,
+    RecipeFormComponent
   ],
   imports: [
     BrowserModule,
