@@ -6,9 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.userName = ?1")
     Optional<User> findUserByUserName(String name);
 
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.recipes WHERE u.userName= ?1")
+    Optional<User> findUserWithRecipesByUserName(String name);
+
     Boolean existsByUserName(String username);
+
+
+
 }
