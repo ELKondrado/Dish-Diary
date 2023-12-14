@@ -12,6 +12,9 @@ public interface RecipeRepository extends JpaRepository<Recipe,Long> {
     @Query("SELECT r FROM Recipe r WHERE r.name = ?1")
     Optional<Recipe> findRecipeByName(String name);
 
+    @Query("SELECT r FROM Recipe r LEFT JOIN FETCH r.users WHERE r.name = ?1")
+    Optional<Recipe> findRecipeWithUsersByName(String name);
+
     Optional<Recipe> findRecipeById(Long id);
 
 }

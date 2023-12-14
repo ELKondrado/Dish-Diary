@@ -5,6 +5,7 @@ import com.example.recipeapp.Exceptions.RecipeNameNotFoundException;
 import com.example.recipeapp.Exceptions.RecipeNotFoundException;
 import com.example.recipeapp.Exceptions.RecipeStepsOfPreparationNotFoundException;
 import com.example.recipeapp.Model.Recipe;
+import com.example.recipeapp.Model.User;
 import com.example.recipeapp.Repositories.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,18 @@ public class RecipeService {
         this.recipeRepository = recipeRepository;
     }
 
+    private void checkRecipeAttributes(Recipe recipe) {
+        if(recipe.getName().length() == 0) {
+            throw new IllegalStateException("Name does not exist!");
+        }
+        if(recipe.getIngredients().length() == 0) {
+            throw new IllegalStateException("Ingredients do not exist!");
+        }
+        if(recipe.getStepsOfPreparation().length() == 0) {
+            throw new IllegalStateException("Steps of preparation do not exist!");
+        }
+    }
+
     @GetMapping
     public List<Recipe> getRecipes(){
         return recipeRepository.findAll();
@@ -34,15 +47,14 @@ public class RecipeService {
     }
 
     public Recipe addNewRecipe(Recipe recipe) {
-        if(recipe.getName().length() == 0 || recipe.getName() == null) {
-            throw new IllegalStateException("Name does not exist!");
-        }
-        if(recipe.getIngredients().length() == 0 || recipe.getIngredients() == null) {
-            throw new IllegalStateException("Ingredients do not exist!");
-        }
-        if(recipe.getStepsOfPreparation().length() == 0 || recipe.getStepsOfPreparation() == null) {
-            throw new IllegalStateException("Steps of preparation do not exist!");
-        }
+        checkRecipeAttributes(recipe);
+        return recipeRepository.save(recipe);
+    }
+
+    public Recipe addNewRecipe(Recipe recipe, User user) {
+        checkRecipeAttributes(recipe);
+        user.getRecipes().add(recipe);
+        recipe.getUsers().add(user);
         return recipeRepository.save(recipe);
     }
 

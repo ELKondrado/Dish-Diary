@@ -3,6 +3,8 @@ package com.example.recipeapp.Model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -22,4 +24,7 @@ public class Recipe {
     private String name;
     private String ingredients;
     private String stepsOfPreparation;
+
+    @ManyToMany(mappedBy = "recipes", fetch = FetchType.LAZY)
+    private List<User> users = new ArrayList<>();
 }
