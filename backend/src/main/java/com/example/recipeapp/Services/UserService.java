@@ -1,5 +1,6 @@
 package com.example.recipeapp.Services;
 
+import com.example.recipeapp.Model.Recipe;
 import com.example.recipeapp.Model.User;
 import com.example.recipeapp.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,11 @@ public class UserService {
         return userRepository.findUserByUserName(username);
     }
 
-    // Add other user-related methods as needed
+    public Optional<User> fetchUserDetails(String username) {
+        return userRepository.findUserByUserName(username);
+    }
 
+    public void deleteUserRecipe(long userId, long recipeId) {
+        userRepository.deleteUserRecipe(userId, recipeId);
+    }
 }
