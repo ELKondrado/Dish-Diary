@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -43,6 +44,34 @@ public class RecipeController {
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/delete/{recipeId}")
+    public ResponseEntity<Recipe> deleteRecipe(@PathVariable("recipeId") Long recipeId){
+        recipeService.deleteRecipe(recipeId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{recipeId}")
+    public ResponseEntity<Recipe> updateRecipe(
+            @PathVariable("recipeId") long recipeId,
+            @RequestBody Map<String, String> request) {
+
+        Recipe recipe = recipeService.getRecipeById(recipeId);
+
+        if (request.containsKey("name")) {
+            recipe = recipeService.updateRecipeName(recipe, request.get("name"));
+        }
+
+        if (request.containsKey("ingredients")) {
+            recipe = recipeService.updateRecipeIngredients(recipe, request.get("ingredients"));
+        }
+
+        if (request.containsKey("stepsOfPreparation")) {
+            recipe = recipeService.updateRecipeStepsOfPreparation(recipe, request.get("stepsOfPreparation"));
+        }
+
+        return new ResponseEntity<>(recipe, HttpStatus.OK);
+    }
+
     @PostMapping("/addUserRecipe")
     public ResponseEntity<Recipe> registerNewRecipe(@RequestBody Recipe recipe,
                                                     @RequestParam("username") String username) {
@@ -57,21 +86,9 @@ public class RecipeController {
         }
     }
 
-    @DeleteMapping("/delete/{recipeId}")
-    public ResponseEntity<Recipe> deleteRecipe(@PathVariable("recipeId") Long recipeId){
-        recipeService.deleteRecipe(recipeId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PutMapping("/update/{recipeId}")
-    public ResponseEntity<Recipe> updateRecipe(@PathVariable("recipeId") long recipeId,
-                                               @RequestParam(required = false) String name,
-                                               @RequestParam(required = false) String ingredients,
-                                               @RequestParam(required = false) String stepsOfPreparation){
-        Recipe recipe;
-        recipe = recipeService.updateRecipeName(recipeId, name);
-        recipe = recipeService.updateRecipeIngredients(recipeId, ingredients);
-        recipe = recipeService.updateRecipeStepsOfPreparation(recipeId, stepsOfPreparation);
-        return new ResponseEntity<>(recipe, HttpStatus.OK);
+    @GetMapping("/user/{userId}/recipes")
+    public ResponseEntity<List<Recipe>> getUserRecipes(@PathVariable("userId") Long userId) {
+        List<Recipe> recipes = recipeService.getUserRecipes(userId);
+        return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 }
