@@ -10,8 +10,8 @@
           </li>
        </ul>
        <form class="form-inline my-2 my-lg-0">
-          <input type="search" #key="ngModel" ngModel
-           name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search recipes..." required>
+          <input type="search" #key="ngModel" ngModel name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search recipes..." required>
+          <button (click)="logout()">Logout</button>
        </form>
     </div>
 </nav>
@@ -19,27 +19,21 @@
 <body class="main-body">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <div>
-        <h3>Welcome to main-page {{username}}</h3>
+        <h3>Welcome to Dish-Diary {{username}}</h3>
         <button (click)="getUserRecipes()">Get Recipes</button>
-        <button (click)="openRecipeForm()">Add Recipe</button>
-        <button (click)="logout()">Logout</button>
     </div>
     <div class="container" id="main-container">
         <div class="row">
-            <div *ngFor="let recipe of recipes" class="col-md-6 col-xl-3">
+            <div *ngFor="let recipe of recipes" class="col-md-6 col-xl-3 card-unit">
                 <div class="card m-b-30">
                     <div class="card-body row">
-                        <div class="col-6">
-                            <a href=""><img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" class="img-fluid rounded-circle w-60"></a>
-                        </div>
-                        <div class="col-6 card-title align-self-center mb-0">
-                            <h5>{{recipe?.name}}</h5>
-                        </div>
+                        <h5 class="card-recipe-name">{{recipe?.name}}</h5>
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Ingredients: <i class="fa fa-phone float-right"></i>{{recipe?.ingredients}}</li>
-                    </ul>
-                    <div class="card-body">
+                        <li class="list-group-item">ING: {{recipe?.ingredients}}</li>
+                        <li class="list-group-item">SOP: {{recipe?.stepsOfPreparation}}</li>
+                     </ul>
+                    <div class="card-body card-list">
                         <div class="float-right btn-group btn-group-sm">
                             <a (click)="onOpenModal(recipe, 'edit')" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
                             <a (click)="onOpenModal(recipe, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></a>
