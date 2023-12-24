@@ -4,13 +4,9 @@ import { UserService } from '../../Models/User/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RecipeService } from '../../Models/Recipe/recipe.service';
 import { AuthService } from '../../Security/auth.service';
-import { RecipeFormComponent } from '../recipe-form/recipe-form.component';
 import { Recipe } from '../../Models/Recipe/recipe';
 import { UserDto } from '../../Models/User/userDto';
 import { NgForm } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-
 
 @Component({
   selector: 'app-main-page',
@@ -18,19 +14,16 @@ import { switchMap } from 'rxjs/operators';
   styleUrl: './main-page.component.css'
 })
 export class MainPageComponent implements OnInit{
-  @ViewChild('recipeFormContainer', { read: ViewContainerRef }) 
-  recipeFormContainer!: ViewContainerRef;
-  public user: UserDto | null = null;
 
   constructor(
-    private resolver: ComponentFactoryResolver,
     private recipeService: RecipeService,
     private authService: AuthService, 
     private userService: UserService,
     private router: Router
   ) {}
 
-  public recipes: Recipe[] | undefined;
+  public user: UserDto | null = null;
+  public recipes: Recipe[] = [];
   public editRecipe: Recipe | undefined;
   public deletedRecipe: Recipe | undefined;
   public username: string | undefined;
@@ -45,18 +38,6 @@ export class MainPageComponent implements OnInit{
       this.username = this.userService.getUsername();
       this.getUserRecipes();
     });
-  }
-
-  public getRecipes(): void {
-    this.recipeService.getRecipes().subscribe(
-      (response: any) => {
-        console.log(response);
-        this.recipes = response;
-      },
-      (error: HttpErrorResponse) => {
-        console.error(error.message);
-      }
-    );
   }
 
   public getUserRecipes(): void {
@@ -89,6 +70,24 @@ export class MainPageComponent implements OnInit{
         console.error('Error updating recipe:', error);
       }
     );
+  }
+
+  public searchRecipe(key: string): void {
+    const resultRecipes: Recipe[] = [];
+    for (const recipe of this.recipes) {
+      if (recipe.name.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        resultRecipes.push(recipe);
+      }
+    }
+    this.recipes = resultRecipes;
+    if (resultRecipes.length === 0 || !key){
+      this.getUserRecipes();
+    }
+  }
+
+  public discoverRecipes(): void {
+    console.log("")
+    this.router.navigate([`/${this.userService.getUsername()}/recipes`]);
   }
 
   public onOpenModal(recipe: Recipe | undefined, mode: string): void {
@@ -179,23 +178,7 @@ export class MainPageComponent implements OnInit{
       }
     );
   }
-  
-  public openRecipeForm(): void {
-    const factory = this.resolver.resolveComponentFactory(RecipeFormComponent);
-    const componentRef = this.recipeFormContainer.createComponent(factory);
-    // You can pass data to the popup component if needed
-    // componentRef.instance.someInput = someData;
-
-    // Subscribe to the close event to clean up when the popup is closed
-    componentRef.instance.close.subscribe(() => {
-      componentRef.destroy();
-    });
-    componentRef.instance.recipeCreated.subscribe(() => {
-      componentRef.destroy();
-      this.fetchRecipes(); 
-    });
-  }
-
+ 
   public logout(): void {   
     this.authService.logout();
   }
