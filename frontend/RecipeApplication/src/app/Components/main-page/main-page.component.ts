@@ -86,8 +86,11 @@ export class MainPageComponent implements OnInit{
   }
 
   public discoverRecipes(): void {
-    console.log("")
     this.router.navigate([`/${this.userService.getUsername()}/recipes`]);
+  }
+
+  public onOpenRecipe(recipe: Recipe): void {
+    this.router.navigate([`/${this.userService.getUsername()}/recipe/${recipe.id}`]);
   }
 
   public onOpenModal(recipe: Recipe | undefined, mode: string): void {
@@ -118,7 +121,7 @@ export class MainPageComponent implements OnInit{
     const button = document.getElementById('add-recipe-form');
     const username = this.authService.getUsernameFromToken();
     button?.click()
-    this.recipeService.addUserRecipe(addForm.value, username).subscribe(
+    this.recipeService.addUserNewRecipe(addForm.value, username).subscribe(
       (response: Recipe) => {
         console.log(response);
         addForm.reset();
