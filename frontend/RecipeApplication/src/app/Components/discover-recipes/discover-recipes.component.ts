@@ -22,9 +22,8 @@ export class DiscoverRecipesComponent implements OnInit{
 
   public user: UserDto | null = null;
   public recipes: Recipe[] = [];
-  public editRecipe: Recipe | undefined;
-  public deletedRecipe: Recipe | undefined;
   public username: string | undefined;
+  public addedRecipe: Recipe | undefined;
 
   ngOnInit(): void {
     this.fetchRecipes();
@@ -37,6 +36,7 @@ export class DiscoverRecipesComponent implements OnInit{
       this.getRecipes();
     });
   }
+
   public getRecipes(): void {
     this.recipeService.getRecipes().subscribe(
       (response: any) => {
@@ -45,6 +45,44 @@ export class DiscoverRecipesComponent implements OnInit{
       },
       (error: HttpErrorResponse) => {
         console.error(error.message);
+      }
+    );
+  }
+
+  public onAddRecipeModal(recipe: Recipe | undefined): void {
+    const container = document.getElementById("main-container");
+    const button = document.createElement('button');
+    this.addedRecipe = recipe;
+
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+    button.setAttribute('data-target', '#addRecipeToUserModal');
+
+    container?.appendChild(button);
+    button.click();
+  }
+
+  public addRecipeToUser(recipeId: number): void {
+    const username = this.authService.getUsernameFromToken();
+
+    const container = document.getElementById("main-container");
+    const button = document.createElement('button');
+    
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+    button.setAttribute('data-target', '#recipeConstraintModal');
+    container?.appendChild(button);
+
+    this.recipeService.addUserRecipe(recipeId, username).subscribe(
+      (response: Recipe) => {
+        if (response == null) {
+          button.click();
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.error(error);
       }
     );
   }

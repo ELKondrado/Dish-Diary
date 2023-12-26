@@ -35,7 +35,7 @@
             <div *ngFor="let recipe of recipes" class="col-md-6 col-xl-3 card-unit">
                   <div class="card m-b-30">
                      <div class="card-body row">
-                        <h5 class="card-recipe-name">{{recipe?.name}}</h5>
+                        <a (click)="onOpenRecipe(recipe)"><h5 class="card-recipe-name">{{recipe?.name}}</h5></a>
                      </div>
                      <ul class="list-group list-group-flush">
                         <li class="list-group-item">ING: {{recipe?.ingredients}}</li>

@@ -28,11 +28,52 @@
                   </ul>
                   <div class="card-body card-list">
                      <div class="float-right btn-group btn-group-sm">
-                           <!-- <a (click)="onOpenModal(recipe, 'edit')" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
-                           <a (click)="onOpenModal(recipe, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></a> -->
+
+                        <div class="button_plus" (click)="onAddRecipeModal(recipe)"><span class="sr-only">(current)</span></div>
+
                      </div>
                   </div>
                </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Add Recipe To User Modal -->
+   <div class="modal fade" id="addRecipeToUserModal" tabindex="-1" role="dialog" aria-labelledby="addModelLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="AddModelLabel">Add Recipe</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to add the recipe: {{addedRecipe?.name}}?</p>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button *ngIf="addedRecipe" (click)="addRecipeToUser(addedRecipe.id)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="modal fade recipe-constraint" id="recipeConstraintModal" tabindex="-1" role="dialog"aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="AddModelLabel">Add Recipe</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>You already have this recipe!</p>
+               <div class="modal-footer">
+                  <button class="btn btn-danger" data-dismiss="modal">Ok</button>
+               </div>
+            </div>
          </div>
       </div>
    </div>
