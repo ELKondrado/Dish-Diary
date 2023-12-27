@@ -72,12 +72,16 @@ export class DiscoverRecipesComponent implements OnInit{
     button.type = 'button';
     button.style.display = 'none';
     button.setAttribute('data-toggle', 'modal');
-    button.setAttribute('data-target', '#recipeConstraintModal');
     container?.appendChild(button);
 
-    this.recipeService.addUserRecipe(recipeId, username).subscribe(
-      (response: Recipe) => {
+    this.recipeService.addUserRecipe(username, recipeId).subscribe(
+      (response: any) => {
         if (response == null) {
+          button.setAttribute('data-target', '#recipeConstraintModal');
+          button.click();
+        }
+        else{
+          button.setAttribute('data-target', '#recipeSuccesModal');
           button.click();
         }
       },
