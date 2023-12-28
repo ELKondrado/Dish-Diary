@@ -104,6 +104,10 @@ export class DiscoverRecipesComponent implements OnInit{
     }
   }
 
+  public mainPage(): void {
+    this.router.navigate([`/${this.userService.getUsername()}/main`]);
+  }
+
   public logout(): void {   
     this.authService.logout();
   }
