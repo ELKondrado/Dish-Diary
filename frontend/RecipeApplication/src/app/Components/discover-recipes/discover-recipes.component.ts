@@ -27,6 +27,7 @@ export class DiscoverRecipesComponent implements OnInit{
 
   ngOnInit(): void {
     this.fetchRecipes();
+    this.fetchUserMenu();
   }
 
   private fetchRecipes(): void {
@@ -34,6 +35,15 @@ export class DiscoverRecipesComponent implements OnInit{
       this.user = this.authService.getUser();
       this.username = this.userService.getUsername();
       this.getRecipes();
+    });
+  }
+
+  private fetchUserMenu(): void {
+    const dropdown = document.querySelector(".dropdown");
+    const select = dropdown?.querySelector(".select");
+    const menu = dropdown?.querySelector(".menu");  
+    select?.addEventListener('click', () => {
+      menu?.classList.toggle('menu-open');
     });
   }
 
@@ -106,6 +116,14 @@ export class DiscoverRecipesComponent implements OnInit{
 
   public mainPage(): void {
     this.router.navigate([`/${this.userService.getUsername()}/main`]);
+  }
+
+  public onOpenRecipe(recipe: Recipe): void {
+    this.router.navigate([`/${this.userService.getUsername()}/recipe/${recipe.id}`]);
+  }
+
+  public userProfile(): void {
+    this.router.navigate([`/${this.userService.getUsername()}/profile`]);
   }
 
   public logout(): void {   
